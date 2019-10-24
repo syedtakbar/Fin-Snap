@@ -1,0 +1,98 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+    background-color: black;
+}
+
+.body {
+  margin: 15px;
+}
+
+h1,
+h2,
+h3 {
+  color: #d86500;
+}
+
+button {
+  margin: 5px;
+}
+
+ul.unstyled {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-image: linear-gradient(to bottom right, #f0582a, #eb0685);
+  
+}
+
+
+nav li {
+  float: left;
+}
+
+nav li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.active {
+   background-color: #e87a66;
+}
+
+
+nav li a:hover   {
+  display: block;
+  background-color: #e87a66;
+}
+
+
+nav button {
+  margin-top: 13px;
+}
+
+li{
+  margin: 10px;
+}
+
+.nav {
+  border-radius: 5%; 
+}
+
+
+
+nav ul li#logo {
+
+  background: no-repeat center/220% url("./fin-snap-logo.png");
+  border-radius: 5%;
+}
+
+.navbar .nav-pills >li >a {
+    color: black;
+ }
+   .navbar .nav-pills > li > a:hover {
+     background-color: e87a66;
+     color: black;
+     border-radius: 5%;
+ }
+
+.navbar .nav-pills .active {
+   background-color: e87a66;
+   color:Black ;
+   font-weight:bold;
+}
+
+button {
+  border-radius: 5%;
+}
