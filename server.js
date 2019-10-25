@@ -6,6 +6,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 const app = express();
+const server = require("http").createServer(app);
+const io = require("socket.io").listen(server);
 
 const jwt = require("express-jwt");
 const jwks = require("jwks-rsa");
@@ -13,12 +15,16 @@ const checkScope = require("express-jwt-authz");
 
 const PORT = process.env.PORT || 3001;
 
-app.use(
-	bodyParser.urlencoded({
-	  extended: false
-	})
-  );
-app.use(bodyParser.json());
+io.on("connection", client => {
+	client.on("notifyUser", () => {
+	  console.log("saving account data to mongo...");
+	  client.emit("timer", new Date());
+	});
+  });
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 mongoose.connect(process.env.MONGODB_URI, {
 	useNewUrlParser: true,
 });
@@ -95,7 +101,7 @@ app.use(routes);
 // });
 
 
-app.listen(PORT, function() {
+server.listen(PORT, function() {
 	console.log(
 		"==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.",
 		PORT,
