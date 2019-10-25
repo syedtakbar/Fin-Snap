@@ -59,11 +59,11 @@ const jwtCheck = jwt({
 
 app.use(routes);
 
-// app.get("/public", (req, res) => {
-// 	res.json({
-// 		message: "hello from public api",
-// 	});
-// });
+app.get("/public", (req, res) => {
+	res.json({
+		message: "hello from public api",
+	});
+});
 
 // app.get("/private", jwtCheck, (req, res) => {
 // 	res.json({

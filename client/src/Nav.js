@@ -14,6 +14,11 @@ export default class Nav extends Component {
 								Home
 							</NavLink>
 						</li>
+						<li>
+							<NavLink to="/public" activeClassName="active">
+								Public
+							</NavLink>
+						</li>						
 						{isAuthenticated() && (
 						<li>
 							<NavLink to="/profile" activeClassName="active">
