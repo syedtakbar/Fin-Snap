@@ -8,7 +8,7 @@ import PlaidAPI from "./PlaidAPI";
 
 import Callback from "./Callback";
 import Admin from "./Admin";
-import Findatamain from "./Findatamain";
+import FinDataMain from "./FinDataMain";
 class App extends Component {
 	constructor(props) {
 		super(props);
@@ -59,7 +59,7 @@ class App extends Component {
 						render={props =>
 							this.auth.isAuthenticated() &&
 							this.auth.userHasScopes(["read:findata"]) ? (
-								<Findatamain
+								<FinDataMain
 									auth={this.auth}
 									getProfile={this.auth.getProfile}
 									plaid={this.plaidapi}
@@ -68,6 +68,7 @@ class App extends Component {
 									addAccount={this.plaidapi.addAccount}	
 									getAllTransactions={this.plaidapi.getAllTransactions}
 									deleteAccount={this.plaidapi.deleteAccount}
+									addAccountProm={this.plaidapi.addAccountProm}									
 									{...props}
 								/>
 							) : (

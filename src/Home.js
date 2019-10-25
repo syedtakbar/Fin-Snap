@@ -28,7 +28,7 @@ export default class Home extends Component {
 							alt="Undraw"
 						/>
 						<h4 className="flow-text">
-							<h3>Fin-Snap</h3>FinTech app using Plaid
+							<b>Fin-Snap</b> is a personal FinTech app created using Plaid
 						</h4>
 						<br />
 					</div>

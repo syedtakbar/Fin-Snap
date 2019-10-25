@@ -65,34 +65,34 @@ app.use(routes);
 // 	});
 // });
 
-app.get("/findata",checkScope(["read:findata"]), (req, res) => {
-	res.json({
-		findata: [
-			{ id: 1, title: "this is a test find data line1" },
-			{ id: 2, title: "this is a test find data line2" },
-			{ id: 3, title: "this is a test find data line3" }
-		],
-		message: "hello from findata api",
-	});
-});
+// app.get("/findata",checkScope(["read:findata"]), (req, res) => {
+// 	res.json({
+// 		findata: [
+// 			{ id: 1, title: "this is a test find data line1" },
+// 			{ id: 2, title: "this is a test find data line2" },
+// 			{ id: 3, title: "this is a test find data line3" }
+// 		],
+// 		message: "hello from findata api",
+// 	});
+// });
 
-function checkRoles(role){
-	return function (req, res, next) {
-		const assignedRoles = req.user["https://localhost:3000/roles"];
-		if (Array.isArray(assignedRoles) && assignedRoles.includes(role)) {
-			return next();
-		}
-		else {
-			return res.status(401).send("insufficient role");
-		}
-	};
-};
+// function checkRoles(role){
+// 	return function (req, res, next) {
+// 		const assignedRoles = req.user["https://localhost:3000/roles"];
+// 		if (Array.isArray(assignedRoles) && assignedRoles.includes(role)) {
+// 			return next();
+// 		}
+// 		else {
+// 			return res.status(401).send("insufficient role");
+// 		}
+// 	};
+// };
 
-app.get("/admin", checkRoles("admin"), (req, res) => {
-	res.json({
-		message: "hello from admin api",
-	});
-});
+// app.get("/admin", checkRoles("admin"), (req, res) => {
+// 	res.json({
+// 		message: "hello from admin api",
+// 	});
+// });
 
 
 app.listen(PORT, function() {

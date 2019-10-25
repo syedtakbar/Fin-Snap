@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import PlaidAcct from "./PlaidAcct";
 import Loading from "./Loading";
 
-class Findatamain extends Component {
+class FinDataMain extends Component {
 
 	constructor(props) {
 		super(props);
@@ -21,6 +21,7 @@ class Findatamain extends Component {
 	componentDidMount() {
 		this.loadUserProfile();		
 	}
+
 
 	componentWillUnmount() {
 		localStorage.removeItem("user_sub");
@@ -53,24 +54,28 @@ class Findatamain extends Component {
 			user: this.state.profile
 		};
 
-		this.props.addAccount(plaidData);
+		this.props.addAccountProm(plaidData, this.state.profile.sub).then(res => {
+			//console.log("promise res inside FinDataMain: " + JSON.stringify(res, null, 2));
+			this.getFinAccounts(this.state.profile.sub);	
+		});			
 	};
+
 
 	render() {
 		const {profile, accounts} = this.state;
 		const { isAuthenticated, login, logout} = this.auth;
 		
-		let dashboardContent;
+		let findatamainContent;
 		
 		if (profile === null) {
-			dashboardContent = <Loading />;
+			findatamainContent = <Loading />;
 		} 
 		else if (accounts && accounts.data.length > 0) {
-			dashboardContent = (
+			findatamainContent = (
 				<PlaidAcct user={profile} accounts={accounts.data}  {...this.props} />
 			);
 		} else {
-			dashboardContent = (
+			findatamainContent = (
 				<div className="row">
 					<div className="col s12 center-align">
 						<h4>
@@ -111,11 +116,11 @@ class Findatamain extends Component {
 			//}			
 		}
 
-		return <div className="container">{dashboardContent}</div>;
+		return <div className="container">{findatamainContent}</div>;
 	}
 }
 
-Findatamain.propTypes = {
+FinDataMain.propTypes = {
 	logoutUser: PropTypes.func.isRequired,
 	getAccounts: PropTypes.func.isRequired,
 	addAccount: PropTypes.func.isRequired,
@@ -123,4 +128,4 @@ Findatamain.propTypes = {
 	plaid: PropTypes.object.isRequired,
 };
 
-export default Findatamain;
+export default FinDataMain;

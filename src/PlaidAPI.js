@@ -14,8 +14,7 @@ export default class PlaidAPI {
 		axios.post("/api/plaid/accounts/transactions", 	plaidData);
 	};
 
-	addAccount = plaidData => {
-		console.log("plaidData:" + JSON.stringify(plaidData, null, 2));
+	addAccount = plaidData => {		
 		const accounts = plaidData.accounts;
 		axios
 			.post("/api/plaid/accounts/add", plaidData)
@@ -24,6 +23,26 @@ export default class PlaidAPI {
 			)
 			.catch(err => console.log(err));
 	};
+
+	addAccountProm = (plaidData, userSub) => {
+		return new Promise((resolve, reject) => {
+			//console.log("plaidData:" + JSON.stringify(plaidData, null, 2));
+			const accounts = plaidData.accounts;
+			axios
+				.post("/api/plaid/accounts/add", plaidData)
+				.then(res => {
+					this.getAccounts(userSub)
+					.then((acct) => {
+						const tran = accounts ? this.getTransactions(accounts.concat(res.data)) : null;
+						console.log("resolve:" + JSON.stringify({acct,tran}, null, 2));
+						resolve({accounts: acct,  tranactions: tran});
+					});
+	
+				})
+				.catch(err => reject(console.log(err)));
+		});
+	};	
+
 
 	deleteAccount = plaidData => {
 		if (window.confirm("Are you sure you want to remove this account?")) {
