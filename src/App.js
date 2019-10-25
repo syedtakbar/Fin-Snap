@@ -9,6 +9,7 @@ import PlaidAPI from "./PlaidAPI";
 import Callback from "./Callback";
 import Admin from "./Admin";
 import FinDataMain from "./FinDataMain";
+
 class App extends Component {
 	constructor(props) {
 		super(props);

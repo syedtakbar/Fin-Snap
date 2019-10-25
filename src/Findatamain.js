@@ -112,8 +112,7 @@ class FinDataMain extends Component {
 						</button>
 					</div>
 				</div>
-			);
-			//}			
+			);			
 		}
 
 		return <div className="container">{findatamainContent}</div>;
