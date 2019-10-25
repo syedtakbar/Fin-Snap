@@ -3,6 +3,7 @@ import PlaidLinkButton from "react-plaid-link-button";
 import PropTypes from "prop-types";
 import PlaidAcct from "./PlaidAcct";
 import Loading from "./Loading";
+import Alert from "./Alert";
 
 class FinDataMain extends Component {
 
@@ -16,6 +17,8 @@ class FinDataMain extends Component {
 		profile: null,
 		accounts:null,		
 		error: "",
+		loaded:true,
+		added:false,
 	};
 
 	componentDidMount() {
@@ -42,7 +45,7 @@ class FinDataMain extends Component {
 		this.props.getAccounts(usersub || localStorage.getItem("user_sub"))
 		.then( (accounts) => {			
 			//console.log(`accounts response: ${JSON.stringify(accounts)}`);
-			this.setState({ accounts});			
+			this.setState({ accounts});						
 		});
 	};
 
@@ -54,15 +57,30 @@ class FinDataMain extends Component {
 			user: this.state.profile
 		};
 
-		this.props.addAccountProm(plaidData, this.state.profile.sub).then(res => {
+		this.props.addAccountProm(plaidData, this.state.profile.sub)
+		.then(res => {
 			//console.log("promise res inside FinDataMain: " + JSON.stringify(res, null, 2));
 			this.getFinAccounts(this.state.profile.sub);	
+			this.notify();
+
 		});			
+	};
+
+	removeNotification = () => {
+		this.setState({ added: false, loaded:false });
+	};
+
+	notify = () => {
+		this.props.notifyUser(() => {
+		  console.log("inside notifyUser setting status");
+		  this.setState({ added: true });
+		});
+		setTimeout(this.removeNotification, 3000);
 	};
 
 
 	render() {
-		const {profile, accounts} = this.state;
+		const {profile, accounts, added, loaded} = this.state;
 		const { isAuthenticated, login, logout} = this.auth;
 		
 		let findatamainContent;
@@ -72,7 +90,17 @@ class FinDataMain extends Component {
 		} 
 		else if (accounts && accounts.data.length > 0) {
 			findatamainContent = (
+				<div>
+						{            
+								added && loaded ? (            
+								<Alert
+										heading="Account added"
+										message={`"${accounts.data[0].institutionName}" has been added to your List.`}
+								/>
+							) : null
+						}				
 				<PlaidAcct user={profile} accounts={accounts.data}  {...this.props} />
+				</div>
 			);
 		} else {
 			findatamainContent = (
@@ -84,7 +112,7 @@ class FinDataMain extends Component {
 						<p className="flow-text grey-text text-darken-1">
 							To get started, link your first bank account below
 						</p>
-						<div>
+						<div>							
 							<PlaidLinkButton
 								buttonProps={{
 									className:
@@ -97,12 +125,11 @@ class FinDataMain extends Component {
                                     product: [process.env.REACT_APP_PLAID_PRODUCTS],									
 									onSuccess: this.handleOnSuccess,
 								}}
-								onScriptLoad={() => this.setState({ loaded: true })}
+								// onScriptLoad={() => this.setState({ loaded: true })}
 							>
 								Add Account
 							</PlaidLinkButton>
-						</div>
-						<br/>
+						</div>						
 						<br/>
 						<button
 							className="btn btn-large waves-effect waves-light hoverable red accent-3 main-btn"

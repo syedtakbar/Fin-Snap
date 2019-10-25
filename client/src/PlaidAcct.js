@@ -3,24 +3,26 @@ import PropTypes from "prop-types";
 import PlaidLinkButton from "react-plaid-link-button";
 import MaterialTable from "material-table";
 import Loading from "./Loading";
+import Alert from "./Alert";
 
 class PlaidAcct extends Component {
-	
 	state = {
 		transactions: null,
 		accounts: null,
 		user: null,
+		acctadded:false,
+		acctloaded: false
 	};
 
 	componentDidMount() {
 		const { accounts, user } = this.props;
-		this.refreshAccount(accounts, user);		
+		this.refreshAccount(accounts, user);
 	}
 
 	refreshAccount(accounts, user) {
-    this.props.plaid.getAllTransactions(accounts).then(transactions => {
-      this.setState({ transactions, accounts, user });
-    });
+		this.props.plaid.getAllTransactions(accounts).then(transactions => {
+			this.setState({ transactions, accounts, user });
+		});
 	}
 
 	handleOnSuccess = (token, metadata) => {
@@ -33,8 +35,9 @@ class PlaidAcct extends Component {
 		};
 
 		this.props.addAccountProm(plaidData, this.state.user.sub).then(res => {
-			//console.log("promise res inside Plaidacct: " + JSON.stringify(res, null, 2));
+			console.log("promise res inside Plaidacct: " + JSON.stringify(res, null, 2));
 			this.refreshAccount(res.accounts.data, this.state.user);
+			this.notify();
 		});
 	};
 
@@ -52,13 +55,25 @@ class PlaidAcct extends Component {
 		this.props.logoutUser();
 	};
 
+	removeNotification = () => {
+		this.setState({ acctadded: false });
+	};
+
+
+	notify = () => {
+		this.props.notifyUser(() => {
+			console.log("inside notifyUser setting status");
+			this.setState({ acctadded: true });
+		});
+		setTimeout(this.removeNotification, 3000);
+	};
+
 	render() {
-		const { user, accounts, transactions } = this.state;
+		const { user, accounts, transactions, acctadded } = this.state;
 
 		let plaidAcctContent;
 		if (accounts === null) {
-      plaidAcctContent = <Loading />;
-      
+			plaidAcctContent = <Loading />;
 		} else if (accounts && accounts.length > 0) {
 			let accountItems = accounts.map(account => (
 				<li key={account._id} style={{ marginTop: "1rem" }}>
@@ -111,22 +126,31 @@ class PlaidAcct extends Component {
 							Add or remove your bank accounts below
 						</p>
 						<ul>{accountItems}</ul>
-						<PlaidLinkButton
-							buttonProps={{
-								className:
-									"btn btn-large waves-effect waves-light hoverable blue accent-3 main-btn",
-							}}
-							plaidLinkProps={{
-								clientName: process.env.REACT_APP_PLAID_CLIENT_NAME,
-								key: process.env.REACT_APP_PLAID_PUBLIC_KEY,
-								env: process.env.REACT_APP_PLAID_ENV,
-								product: [process.env.REACT_APP_PLAID_PRODUCTS],
-								onSuccess: this.handleOnSuccess,
-							}}
-							onScriptLoad={() => this.setState({ loaded: true })}
-						>
-							Add Account
-						</PlaidLinkButton>
+						<div>
+							{acctadded ? (
+								<Alert
+									heading="Account added"
+									message={`"${accounts[accounts.length - 1].institutionName}" has been added to your List.`}
+								/>
+							) : null}
+
+							<PlaidLinkButton
+								buttonProps={{
+									className:
+										"btn btn-large waves-effect waves-light hoverable blue accent-3 main-btn",
+								}}
+								plaidLinkProps={{
+									clientName: process.env.REACT_APP_PLAID_CLIENT_NAME,
+									key: process.env.REACT_APP_PLAID_PUBLIC_KEY,
+									env: process.env.REACT_APP_PLAID_ENV,
+									product: [process.env.REACT_APP_PLAID_PRODUCTS],
+									onSuccess: this.handleOnSuccess,
+								}}
+								// onScriptLoad={() => this.setState({ acctloaded: true })}
+							>
+								Add Account
+							</PlaidLinkButton>
+						</div>
 						<hr style={{ marginTop: "2rem", opacity: ".2" }} />
 						<h5>
 							<b>Transactions</b>
@@ -159,8 +183,8 @@ class PlaidAcct extends Component {
 				</div>
 			);
 		}
-    //return <div className="container">{plaidAcctContent}</div>;
-    return <div>{plaidAcctContent}</div>;
+		//return <div className="container">{plaidAcctContent}</div>;
+		return <div>{plaidAcctContent}</div>;
 	}
 }
 

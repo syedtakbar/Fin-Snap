@@ -75,7 +75,8 @@ class App extends Component {
 									addAccount={this.plaidapi.addAccount}	
 									getAllTransactions={this.plaidapi.getAllTransactions}
 									deleteAccount={this.plaidapi.deleteAccount}
-									addAccountProm={this.plaidapi.addAccountProm}									
+									addAccountProm={this.plaidapi.addAccountProm}	
+									notifyUser={this.plaidapi.notifyUser}																		
 									{...props}
 								/>
 							) : (

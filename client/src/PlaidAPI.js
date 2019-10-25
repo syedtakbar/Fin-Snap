@@ -1,4 +1,6 @@
 import axios from "axios";
+import io from "socket.io-client";
+const socket = io("/");
 
 export default class PlaidAPI {
 	constructor(auth) {
@@ -63,5 +65,14 @@ export default class PlaidAPI {
 				"Authorization": `Bearer ${this.auth.getAccessToken()}` 
 			},			
 		});
+	};
+
+	notifyUser = (cb) => {
+		console.log("notifyUser api");
+		socket.on("timer", timestamp => {
+		  console.log("notifyUser socket on event");
+		  cb(null, timestamp);
+		});
+		socket.emit("notifyUser", 100);
 	};
 }

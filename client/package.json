@@ -16,7 +16,9 @@
     "react-dom": "^16.11.0",
     "react-plaid-link-button": "0.0.4",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.2.0"
+    "react-scripts": "3.2.0",
+    "socket.io-client": "^2.2.0",
+    "webpack-cli": "^3.3.2"
   },
   "scripts": {
     "start": "react-scripts start",

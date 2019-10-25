@@ -1,0 +1,14 @@
+
+.notification {
+    position: relative;
+    width: 75%;
+    z-index: 1;
+    opacity: .5;
+    /* background-color: rgba(225,250,234,.9); */
+    background-color:#1b587c;
+    color:  white;
+    border: solid .05rem #738077;
+    padding: .6rem;
+    border-radius: 10px;
+}
+
