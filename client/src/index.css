@@ -1,0 +1,4 @@
+.responsive-img { padding-top: 70px; }
+@media screen and (min-width: 768px) {
+    .responsive-img { padding-top: 100px; }
+}
