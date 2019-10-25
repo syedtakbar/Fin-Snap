@@ -20,7 +20,7 @@ io.on("connection", client => {
 	  console.log("saving account data to mongo...");
 	  client.emit("timer", new Date());
 	});
-  });
+});
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
