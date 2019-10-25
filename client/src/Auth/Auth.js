@@ -98,5 +98,14 @@ export default class Auth {
 			JSON.parse(localStorage.getItem("scopes")) || ""
 		).split(" ");
 		return scopes.every(scope => grantedScopes.includes(scope));
-	}
+	};
+
+	isAdmin = () => {				
+		if (!localStorage.getItem("access_token")) return false;
+		const profile = localStorage.getItem("access_token");
+		const assignedRoles =  (profile)  && profile["https://localhost:3000/roles"];
+		// console.log(profile);
+		// console.log(assignedRoles);
+		return (Array.isArray(assignedRoles) && assignedRoles.includes("admin"));					
+	};
 }

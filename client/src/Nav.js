@@ -1,32 +1,33 @@
 import React, { Component } from "react";
-import {NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export default class Nav extends Component {
-
 	render() {
-		const { isAuthenticated, login, logout, userHasScopes } = this.props.auth;
+		const { isAuthenticated, login, logout, userHasScopes, isAdmin } = this.props.auth;
 		return (
 			<>
 				<nav className="navbar navbar-default navbar-static-top">
-					<ul className="nav nav-pills">						
+					<ul className="nav nav-pills">
 						<li>
 							<NavLink to="/" activeClassName="active">
 								Home
 							</NavLink>
 						</li>
-						<li>
-							<NavLink to="/public" activeClassName="active">
-								Public
-							</NavLink>
-						</li>						
-						{isAuthenticated() && (
-						<li>
-							<NavLink to="/profile" activeClassName="active">
-								Profile
-							</NavLink>
-						</li>
+						{isAdmin() && (
+							<li>
+								<NavLink to="/public" activeClassName="active">
+									Public
+								</NavLink>
+							</li>
 						)}
-						{isAuthenticated() && (
+						{isAdmin() && isAuthenticated() && (
+							<li>
+								<NavLink to="/profile" activeClassName="active">
+									Profile
+								</NavLink>
+							</li>
+						)}
+						{isAdmin()  && isAuthenticated() && (
 							<li>
 								<NavLink to="/admin" activeClassName="active">
 									Admin

@@ -6,6 +6,13 @@ export default class Home extends Component {
 		loaded: false
 	}
 
+	componentDidMount() {		
+		if (this.props.auth.isAuthenticated() && 
+			this.props.auth.userHasScopes(["read:findata"]) ) {
+		  this.props.history.push("/findata");
+		}
+	  }
+
 	handleOnSuccess = (token, metadata) => {
 		const plaidData = {
 			public_token: token,
