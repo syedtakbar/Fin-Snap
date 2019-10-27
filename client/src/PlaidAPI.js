@@ -36,7 +36,7 @@ export default class PlaidAPI {
 					this.getAccounts(userSub)
 					.then((acct) => {
 						const tran = accounts ? this.getTransactions(accounts.concat(res.data)) : null;
-						console.log("resolve:" + JSON.stringify({acct,tran}, null, 2));
+						//console.log("resolve:" + JSON.stringify({acct,tran}, null, 2));
 						resolve({accounts: acct,  tranactions: tran});
 					});
 	
@@ -46,17 +46,23 @@ export default class PlaidAPI {
 	};	
 
 
-	deleteAccount = plaidData => {
-		if (window.confirm("Are you sure you want to remove this account?")) {
+	deleteAccount = (plaidData, userSub) => {
+		return new Promise((resolve, reject) => {						
 			const id = plaidData.id;
 			const newAccounts = plaidData.accounts.filter(
 				account => account._id !== id
 			);
 			axios
 				.delete(`/api/plaid/accounts/${id}`)
-				.then(newAccounts ? this.getTransactions(newAccounts) : null)
-				.catch(err => console.log(err));
-		}
+				.then(() => {
+					this.getAccounts(userSub)
+					.then((acct) => {
+						const tran = newAccounts ? this.getTransactions(newAccounts) : null;
+						resolve({accounts: acct, tranactions: tran});
+					});
+				})
+				.catch(err => reject(console.log(err)));
+		});
 	};
 
 	getAccounts = user => {	

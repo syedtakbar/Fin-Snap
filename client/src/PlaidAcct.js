@@ -10,8 +10,10 @@ class PlaidAcct extends Component {
 		transactions: null,
 		accounts: null,
 		user: null,
-		acctadded:false,
-		acctloaded: false
+		acctadded: false,
+		acctloaded: false,
+		acctdeleted: false,
+		deletedinstitutionName: "",
 	};
 
 	componentDidMount() {
@@ -35,19 +37,30 @@ class PlaidAcct extends Component {
 		};
 
 		this.props.addAccountProm(plaidData, this.state.user.sub).then(res => {
-			console.log("promise res inside Plaidacct: " + JSON.stringify(res, null, 2));
+			//console.log("promise res inside Plaidacct: " + JSON.stringify(res, null, 2));
 			this.refreshAccount(res.accounts.data, this.state.user);
-			this.notify();
+			this.notify(true);
 		});
 	};
 
-	onDeleteClick = id => {
+	onDeleteClick = (id, institutionName) => {
 		const { accounts } = this.props;
 		const accountData = {
 			id: id,
 			accounts: accounts,
 		};
-		this.props.deleteAccount(accountData);
+		this.props.deleteAccount(accountData, this.state.user.sub).then(res => {
+			// console.log(
+			// 	"promise del account inside Plaidacct: " + JSON.stringify(res, null, 2)
+			// );
+			this.refreshAccount(res.accounts.data, this.state.user);
+			this.setState({ deletedinstitutionName: institutionName });
+			//console.log("array size:" + res.accounts.data.length)
+			if (res.accounts.data && res.accounts.data.length === 0) {
+				window.location.reload(); 
+			}
+			this.notify(false);
+		});
 	};
 
 	onLogoutClick = e => {
@@ -56,20 +69,20 @@ class PlaidAcct extends Component {
 	};
 
 	removeNotification = () => {
-		this.setState({ acctadded: false });
+		this.setState({ acctadded: false, acctdeleted: false });
 	};
 
-
-	notify = () => {
+	notify = (add) => {
 		this.props.notifyUser(() => {
-			console.log("inside notifyUser setting status");
-			this.setState({ acctadded: true });
+			add ? 
+			this.setState({ acctadded: true, acctdeleted: false })
+			: this.setState({ acctadded: false, acctdeleted: true })
 		});
 		setTimeout(this.removeNotification, 3000);
 	};
 
 	render() {
-		const { user, accounts, transactions, acctadded } = this.state;
+		const { user, accounts, transactions, acctadded, acctdeleted, deletedinstitutionName } = this.state;
 
 		let plaidAcctContent;
 		if (accounts === null) {
@@ -79,7 +92,7 @@ class PlaidAcct extends Component {
 				<li key={account._id} style={{ marginTop: "1rem" }}>
 					<button
 						style={{ marginRight: "1rem" }}
-						onClick={this.onDeleteClick.bind(this, account._id)}
+						onClick={this.onDeleteClick.bind(this, account._id,account.institutionName )}
 						className="btn btn-small btn-floating waves-effect waves-light hoverable red accent-3"
 					>
 						<i className="material-icons">delete</i>
@@ -127,13 +140,16 @@ class PlaidAcct extends Component {
 						</p>
 						<ul>{accountItems}</ul>
 						<div>
-							{acctadded ? (
+							{acctadded || acctdeleted ? (
 								<Alert
-									heading="Account added"
-									message={`"${accounts[accounts.length - 1].institutionName}" has been added to your List.`}
+									heading={acctdeleted ? "Account deleted" : "Account added"}
+									message={
+										acctdeleted
+											? `"${deletedinstitutionName}" an account has been removed from your List.`
+											: `"${accounts[accounts.length - 1].institutionName}" has been added to your List.`
+									}
 								/>
 							) : null}
-
 							<PlaidLinkButton
 								buttonProps={{
 									className:
