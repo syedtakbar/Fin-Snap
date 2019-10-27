@@ -16,7 +16,8 @@ This project uses the following technologies:
 
 ## The App
 
-![Results](./fin-snap-app-demo.gif "Fin-Snap-App")
+<!-- ![Results](./devour-burger.gif) -->
+![Alt text](./Fin-Snap-App-Demo.gif "Fin-Snap-App")
 
 ## Configuration
 
