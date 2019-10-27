@@ -1,7 +1,7 @@
 # Fin-Snap
 MERN project to personalize financial snapshot using Auth0 and Plaid. This SPA (Single Page Application) uses [`react-router-dom`]to navigate, hide and show your React components without changing the route within Express.
 
-When using our Plaid Sandbox environment, use user_good as the username and pass_good for the password. 
+When using our Plaid Sandbox environment, use `user_good` as the username and `pass_good` for the password. 
 
 This project uses the following technologies:
 
@@ -9,7 +9,6 @@ This project uses the following technologies:
 - [React](https://reactjs.org) and [React Router](https://reacttraining.com/react-router/) for the frontend
 - [Express](http://expressjs.com/) and [Node](https://nodejs.org/en/) for the backend
 - [MongoDB](https://www.mongodb.com/) for the database
-- [Redux](https://redux.js.org/basics/usagewithreact) for global state management
 - [Plaid](https://plaid.com) for bank account linkage and transaction data
 - [Socket](https://socket.io) for user action alerts
 - [material-table](https://material-table.com/#/) for bank transaction display and search
