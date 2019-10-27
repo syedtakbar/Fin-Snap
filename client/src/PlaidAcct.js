@@ -145,7 +145,7 @@ class PlaidAcct extends Component {
 									heading={acctdeleted ? "Account deleted" : "Account added"}
 									message={
 										acctdeleted
-											? `"${deletedinstitutionName}" an account has been removed from your List.`
+											? `"${deletedinstitutionName}" account has been removed from your List.`
 											: `"${accounts[accounts.length - 1].institutionName}" has been added to your List.`
 									}
 								/>
